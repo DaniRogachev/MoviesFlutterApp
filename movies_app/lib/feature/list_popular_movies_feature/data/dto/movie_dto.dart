@@ -1,9 +1,10 @@
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:movies_app/feature/list_popular_movies_feature/data/dto/genre_dto.dart';
-part 'movie_dto.mapper.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@MappableClass(caseStyle: CaseStyle.snakeCase)
-class MovieDTO with MovieDTOMappable {
+part 'movie_dto.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class MovieDTO {
   MovieDTO(
       {required this.adult,
       required this.backdropPath,
@@ -18,6 +19,9 @@ class MovieDTO with MovieDTOMappable {
       required this.voteAverage,
       required this.voteCount});
 
+  factory MovieDTO.fromJson(Map<String, dynamic> json) =>
+      _$MovieDTOFromJson(json);
+
   final bool adult;
   final String backdropPath;
   final List<GenreDTO>? genres;
@@ -31,8 +35,10 @@ class MovieDTO with MovieDTOMappable {
   final double voteAverage;
   final int voteCount;
 
-  static MovieDTO fromJson(String json) => MovieDTOMapper.fromJson(json);
+  Map<String, dynamic> toJson() => _$MovieDTOToJson(this);
 
-  static MovieDTO fromMap(Map<String, dynamic> map) =>
-      MovieDTOMapper.fromMap(map);
+  // static MovieDTO fromJson(Map<String, dynamic> json) => MovieDTOMapper.fromJson(json);
+
+  // static MovieDTO fromMap(Map<String, dynamic> map) =>
+  //     MovieDTOMapper.fromMap(map);
 }

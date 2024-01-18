@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:movies_app/feature/list_popular_movies_feature/data/rest_client.dart';
 
 @module
 abstract class DioModule {
@@ -9,4 +10,7 @@ abstract class DioModule {
         'Authorization':
             'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NGE0MTRlYjBlZGM4ZmQwNzI5NmNmNDY4ZGM1ZDc0ZiIsInN1YiI6IjY1NzFmMmM4ODU4Njc4MDBjOWNjMmRiMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IgD6YMD88AhzH8doVdj3f2d3L_2eDelAH0hU8ciUfj4',
       }));
+
+  @lazySingleton
+  RestClient restClient(Dio dio) => RestClient(dio);
 }

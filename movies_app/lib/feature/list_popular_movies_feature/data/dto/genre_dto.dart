@@ -1,15 +1,16 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'genre_dto.mapper.dart';
+part 'genre_dto.g.dart';
 
-@MappableClass(caseStyle: CaseStyle.snakeCase)
-class GenreDTO with GenreDTOMappable {
+@JsonSerializable(fieldRename: FieldRename.snake)
+class GenreDTO {
   GenreDTO({required this.id, required this.name});
+
+  factory GenreDTO.fromJson(Map<String, dynamic> json) =>
+      _$GenreDTOFromJson(json);
 
   final int id;
   final String name;
 
-  static GenreDTO fromJson(String json) => GenreDTOMapper.fromJson(json);
-
-  static GenreDTO fromMap(Map<String, dynamic> map) => GenreDTOMapper.fromMap(map);
+  Map<String, dynamic> toJson() => _$GenreDTOToJson(this);
 }

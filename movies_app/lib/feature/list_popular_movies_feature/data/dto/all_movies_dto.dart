@@ -1,23 +1,22 @@
-import 'package:dart_mappable/dart_mappable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:movies_app/feature/list_popular_movies_feature/data/dto/movie_dto.dart';
-part 'all_movies_dto.mapper.dart';
+part 'all_movies_dto.g.dart';
 
-@MappableClass(caseStyle: CaseStyle.snakeCase)
-class AllMoviesDTO with AllMoviesDTOMappable {
+@JsonSerializable(fieldRename: FieldRename.snake)
+class AllMoviesDTO {
   AllMoviesDTO(
       {required this.page,
       required this.results,
       required this.totalPages,
       required this.totalResults});
 
+  factory AllMoviesDTO.fromJson(Map<String, dynamic> json) =>
+      _$AllMoviesDTOFromJson(json);
+
   final int page;
   final List<MovieDTO> results;
   final int totalPages;
   final int totalResults;
 
-  static AllMoviesDTO fromJson(String json) =>
-      AllMoviesDTOMapper.fromJson(json);
-
-  static AllMoviesDTO fromMap(Map<String, dynamic> map) =>
-      AllMoviesDTOMapper.fromMap(map);
+  Map<String, dynamic> toJson() => _$AllMoviesDTOToJson(this);
 }

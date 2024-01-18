@@ -26,7 +26,7 @@ class GenreMapper extends ClassMapperBase<Genre> {
   static const Field<Genre, String> _f$name = Field('name', _$name, opt: true);
 
   @override
-  final Map<Symbol, Field<Genre, dynamic>> fields = const {
+  final MappableFields<Genre> fields = const {
     #id: _f$id,
     #name: _f$name,
   };

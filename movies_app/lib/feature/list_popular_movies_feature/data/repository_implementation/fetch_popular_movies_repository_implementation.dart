@@ -1,32 +1,23 @@
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:movies_app/feature/list_popular_movies_feature/data/dto/all_movies_dto.dart';
+import 'package:movies_app/feature/list_popular_movies_feature/data/rest_client.dart';
 import 'package:movies_app/feature/list_popular_movies_feature/domain/entity/movie_entity.dart';
 import 'package:movies_app/feature/list_popular_movies_feature/domain/repository_interface/fetch_popular_movies_repository.dart';
 import 'package:movies_app/feature/list_popular_movies_feature/movie_mapper.dart';
-import 'package:movies_app/injection.dart';
 
 @Singleton(as: FetchPopularMoviesRepository)
 class FetchPopularMoviesRepositoryImplementation
     implements FetchPopularMoviesRepository {
-  FetchPopularMoviesRepositoryImplementation(this._dio);
+  FetchPopularMoviesRepositoryImplementation(this._client, this._movieMapper);
 
-  final Dio _dio;
+  final RestClient _client;
+  final MovieMapper _movieMapper;
 
   @override
   Future<List<MovieEntity>> fetchPopularMovies(int currPage) async {
-    final response = await _dio
-        .get("https://api.themoviedb.org/3/movie/popular?page=$currPage");
-    if (response.statusCode == 200) {
-      final allMoviesDTO = AllMoviesDTO.fromMap(response.data);
-      List<MovieEntity> result = [];
-      result = allMoviesDTO.results
-          .map((movieDTO) =>
-              getIt<MovieMapper>().mapMovieDTOToMovieEntity(movieDTO))
-          .toList();
-      currPage++;
-      return result;
-    }
-    throw Exception('Failed to load the movies');
+    final allMoviesDTO = await _client.getPopularMovies(currPage);
+    return allMoviesDTO.results
+        .map((movieDTO) =>
+            _movieMapper.mapMovieDTOToMovieEntity(movieDTO))
+        .toList();
   }
 }
